@@ -132,6 +132,81 @@
 
 
   /* ============================================================
+     PREDICTIONS CLOSED - TOP OF PAGE
+     ============================================================ */
+
+  .predictions-closed-top{
+    max-width:760px;
+    margin:20px auto 8px;
+    padding:14px 18px 8px;
+    background:var(--lav);
+    border:1px solid var(--lav-line);
+    border-radius:8px;
+    color:var(--pl-purple);
+    font-weight:600;
+    text-align:center;
+  }
+
+  .predictions-closed-top .access-link{
+    display:inline-block;
+    margin-top:8px;
+    color:var(--pl-purple);
+    font-weight:700;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  .predictions-closed-top .access-link:hover{
+    color:var(--pl-purple-dark);
+  }
+
+
+  /* ============================================================
+     ACCESS CODE
+     ============================================================ */
+
+  .access-override-row{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .access-code-input{
+    padding:9px 12px;
+    border:1px solid #d5d0e0;
+    border-radius:6px;
+    font-size:14px;
+    width:180px;
+  }
+
+  .access-code-input:focus{
+    outline:2px solid var(--pl-purple);
+    outline-offset:-2px;
+  }
+
+  .access-code-btn{
+    padding:9px 16px;
+    border:none;
+    border-radius:6px;
+    background:var(--pl-purple);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .access-code-btn:hover{
+    background:var(--pl-purple-dark);
+  }
+
+  .access-error{
+    margin:10px 0 0;
+    color:var(--req);
+    font-size:13px;
+    min-height:16px;
+  }
+
+
+  /* ============================================================
      BODY
      ============================================================ */
 
@@ -307,85 +382,6 @@
   .submit-msg{
     font-size:14px;
     color:var(--muted);
-  }
-
-
-  /* ============================================================
-     PREDICTIONS CLOSED
-     ============================================================ */
-
-  .predictions-closed{
-    max-width:760px;
-    margin:0 auto 14px;
-    padding:14px 18px;
-    background:var(--lav);
-    border:1px solid var(--lav-line);
-    border-radius:8px;
-    color:var(--pl-purple);
-    font-weight:600;
-    text-align:center;
-  }
-
-
-  /* ============================================================
-     ACCESS CODE OVERRIDE
-     ============================================================ */
-
-  .access-override{
-    max-width:760px;
-    margin:0 auto 30px;
-    padding:18px 20px;
-    background:#fff;
-    border:1px solid var(--lav-line);
-    border-radius:8px;
-    text-align:center;
-    box-shadow:0 2px 6px rgba(0,0,0,.05);
-  }
-
-  .access-override p{
-    margin:0 0 12px;
-    font-size:13px;
-    color:var(--muted);
-  }
-
-  .access-override-row{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-  }
-
-  .access-code-input{
-    padding:9px 12px;
-    border:1px solid #d5d0e0;
-    border-radius:6px;
-    font-size:14px;
-    width:180px;
-  }
-
-  .access-code-input:focus{
-    outline:2px solid var(--pl-purple);
-    outline-offset:-2px;
-  }
-
-  .access-code-btn{
-    padding:9px 16px;
-    border:none;
-    border-radius:6px;
-    background:var(--pl-purple);
-    color:#fff;
-    font-weight:600;
-    cursor:pointer;
-  }
-
-  .access-code-btn:hover{
-    background:var(--pl-purple-dark);
-  }
-
-  .access-error{
-    margin:10px 0 0;
-    color:var(--req);
-    font-size:13px;
-    min-height:16px;
   }
 
 
@@ -642,16 +638,8 @@ const hullCityBadge =
 
 
 // ============================================================
-// ACCESS CODE
+// ACCESS CODE OVERRIDE
 // ============================================================
-//
-// Change this to whatever code you want to use.
-//
-// IMPORTANT:
-// This is a client-side code, so it is suitable as an
-// emergency/family-game override rather than a secure
-// authentication system.
-//
 
 const ACCESS_OVERRIDE_CODE =
   'oldtrafford';
@@ -881,7 +869,7 @@ function createAccessOverride() {
 
   if (
     document.getElementById(
-      'accessOverride'
+      'predictionsClosedTop'
     )
   ) {
 
@@ -890,58 +878,111 @@ function createAccessOverride() {
   }
 
 
-  const override =
+  const message =
     document.createElement(
       'div'
     );
 
 
-  override.id =
-    'accessOverride';
+  message.id =
+    'predictionsClosedTop';
 
 
-  override.className =
-    'access-override';
+  message.className =
+    'predictions-closed-top';
 
 
-  override.innerHTML = `
+  message.innerHTML = `
 
-    <p>
-      Have an access code?
-    </p>
-
-    <div class="access-override-row">
-
-      <input
-        type="password"
-        id="accessCodeInput"
-        class="access-code-input"
-        placeholder="Enter access code"
-        autocomplete="off"
-      >
-
-      <button
-        type="button"
-        id="accessCodeBtn"
-        class="access-code-btn"
-      >
-        Unlock
-      </button>
-
+    <div>
+      Predictions are closed because the matchday has started.
     </div>
 
     <div
-      id="accessCodeError"
-      class="access-error"
-    ></div>
+      class="access-link"
+      id="showAccessCode"
+    >
+      Have an access code?
+      <strong>Unlock</strong>
+    </div>
+
+    <div
+      id="accessCodePanel"
+      style="display:none; margin-top:14px;"
+    >
+
+      <div class="access-override-row">
+
+        <input
+          type="password"
+          id="accessCodeInput"
+          class="access-code-input"
+          placeholder="Enter access code"
+          autocomplete="off"
+        >
+
+        <button
+          type="button"
+          id="accessCodeBtn"
+          class="access-code-btn"
+        >
+          Unlock
+        </button>
+
+      </div>
+
+      <div
+        id="accessCodeError"
+        class="access-error"
+      ></div>
+
+    </div>
 
   `;
 
 
-  submitRow.parentNode.insertBefore(
-    override,
-    submitRow
+  // Insert directly below header
+
+  const header =
+    document.querySelector(
+      '.header'
+    );
+
+
+  header.parentNode.insertBefore(
+    message,
+    header.nextSibling
   );
+
+
+  // Show access-code panel
+
+  document
+    .getElementById(
+      'showAccessCode'
+    )
+    .addEventListener(
+      'click',
+      () => {
+
+        const panel =
+          document.getElementById(
+            'accessCodePanel'
+          );
+
+
+        panel.style.display =
+          'block';
+
+
+        document
+          .getElementById(
+            'accessCodeInput'
+          )
+          .focus();
+
+      }
+    );
 
 
   // Unlock button
@@ -1047,41 +1088,7 @@ function lockPredictions() {
     'Predictions Closed - Game Started';
 
 
-  // Add closed message
-
-  if (
-    !document.getElementById(
-      'predictionsClosedMessage'
-    )
-  ) {
-
-    const message =
-      document.createElement(
-        'div'
-      );
-
-
-    message.id =
-      'predictionsClosedMessage';
-
-
-    message.className =
-      'predictions-closed';
-
-
-    message.textContent =
-      'Predictions are closed because the matchday has started.';
-
-
-    submitRow.parentNode.insertBefore(
-      message,
-      submitRow
-    );
-
-  }
-
-
-  // Add access-code box
+  // Create closed message at top
 
   createAccessOverride();
 
@@ -1300,28 +1307,13 @@ function unlockPredictions() {
 
     const closedMessage =
       document.getElementById(
-        'predictionsClosedMessage'
+        'predictionsClosedTop'
       );
 
 
     if (closedMessage) {
 
       closedMessage.remove();
-
-    }
-
-
-    // Remove access code box
-
-    const override =
-      document.getElementById(
-        'accessOverride'
-      );
-
-
-    if (override) {
-
-      override.remove();
 
     }
 
@@ -1592,28 +1584,13 @@ async function loadFixtures(
 
   const oldClosedMessage =
     document.getElementById(
-      'predictionsClosedMessage'
+      'predictionsClosedTop'
     );
 
 
   if (oldClosedMessage) {
 
     oldClosedMessage.remove();
-
-  }
-
-
-  // Remove previous access box
-
-  const oldAccessOverride =
-    document.getElementById(
-      'accessOverride'
-    );
-
-
-  if (oldAccessOverride) {
-
-    oldAccessOverride.remove();
 
   }
 
@@ -2203,3 +2180,4 @@ document
 
 </body>
 </html>
+```
