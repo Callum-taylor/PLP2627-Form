@@ -8,8 +8,8 @@
 <style>
 
   :root{
-    --pl-purple:#3d1a68;
-    --pl-purple-dark:#2b1149;
+    --pl-purple:#2c0231;
+    --pl-purple-dark:#210124;
     --lav:#ece7f5;
     --lav-line:#ded6ee;
     --page-bg:#f2f1f4;
@@ -41,15 +41,22 @@
   }
 
   .brand{
-    display:flex;
+    display:inline-flex;
+    flex-direction:column;
     align-items:center;
-    gap:10px;
+    gap:6px;
     margin-bottom:22px;
   }
 
   .brand svg{
     width:34px;
     height:34px;
+  }
+
+  .brand-logo{
+    height:40px;
+    width:auto;
+    display:block;
   }
 
   .brand-text{
@@ -444,6 +451,10 @@
       font-size:28px;
     }
 
+    .brand-logo{
+      height:30px;
+    }
+
     .fixture-row{
       gap:15px;
     }
@@ -502,8 +513,13 @@
 
   <div class="brand">
 
+    <img
+      src="data:image/png;base64,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"
+      alt="Premier League"
+      class="brand-logo">
+
     <div class="brand-text">
-      Premier League Predictions
+      Predictions
     </div>
 
   </div>
@@ -656,6 +672,89 @@ let kickoffTime = null;
 let timerInterval = null;
 
 let predictionOverride = false;
+
+// Difference (ms) between the authoritative UK clock and this device's
+// clock. Added to Date.now() so that the kickoff lock is based on real
+// UK time rather than whatever time/timezone the user's device is set to.
+let ukTimeOffset = 0;
+
+
+// ============================================================
+// UK TIME SYNC
+// ============================================================
+
+// Returns the current time in ms, corrected to real UK time.
+
+function getUKNow() {
+
+  return (
+    Date.now() +
+    ukTimeOffset
+  );
+
+}
+
+
+// Fetches the current UK time from a time server and stores the
+// offset from the device clock. Falls back to the device clock
+// (offset 0) if the request fails, e.g. if the network is down.
+
+async function syncUKTime() {
+
+  try {
+
+    const res =
+      await fetch(
+        'https://worldtimeapi.org/api/timezone/Europe/London'
+      );
+
+    if (!res.ok) {
+
+      throw new Error(
+        `Time service returned HTTP ${res.status}`
+      );
+
+    }
+
+    const data =
+      await res.json();
+
+    const serverNow =
+      new Date(
+        data.utc_datetime
+      ).getTime();
+
+    if (isNaN(serverNow)) {
+
+      throw new Error(
+        'Time service returned an invalid time.'
+      );
+
+    }
+
+    ukTimeOffset =
+      serverNow - Date.now();
+
+    console.log(
+      'UK time synced. Offset (ms):',
+      ukTimeOffset
+    );
+
+  } catch (error) {
+
+    console.error(
+      'UK TIME SYNC ERROR:',
+      error
+    );
+
+    // Fall back to the device clock if the time service
+    // can't be reached.
+
+    ukTimeOffset = 0;
+
+  }
+
+}
 
 
 // ============================================================
@@ -902,7 +1001,6 @@ function createAccessOverride() {
       class="access-link"
       id="showAccessCode"
     >
-      Have an access code?
       <strong>Unlock</strong>
     </div>
 
@@ -1134,7 +1232,7 @@ function checkTimeAndLock() {
 
 
   const now =
-    Date.now();
+    getUKNow();
 
 
   if (
@@ -1205,7 +1303,7 @@ function startPredictionTimer(
   // Continue checking every second
 
   if (
-    Date.now() <
+    getUKNow() <
     kickoffTime
   ) {
 
@@ -1781,7 +1879,13 @@ matchdayInput.addEventListener(
 // INITIAL LOAD
 // ============================================================
 
-(function init() {
+(async function init() {
+
+  // Sync to real UK time first so the kickoff lock uses an
+  // authoritative clock rather than the device's own clock.
+
+  await syncUKTime();
+
 
   const params =
     new URLSearchParams(
@@ -1842,7 +1946,7 @@ document
 
       if (
         kickoffTime &&
-        Date.now() >= kickoffTime &&
+        getUKNow() >= kickoffTime &&
         !predictionOverride
       ) {
 
