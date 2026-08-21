@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premier League Predictions</title>
+
+<style>
+
+  :root{
+    --pl-purple:#3d1a68;
+    --pl-purple-dark:#2b1149;
+    --lav:#ece7f5;
+    --lav-line:#ded6ee;
+    --page-bg:#f2f1f4;
+    --ink:#1c1626;
+    --muted:#56506a;
+    --req:#d1274a;
+  }
+
+  *{
+    box-sizing:border-box;
+  }
+
+  body{
+    margin:0;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--page-bg);
+    color:var(--ink);
+  }
+
+
+  /* ============================================================
+     HEADER
+     ============================================================ */
+
+  .header{
+    background:var(--pl-purple);
+    color:#fff;
+    padding:28px 40px 30px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+
+  .brand svg{
+    width:34px;
+    height:34px;
+  }
+
+  .brand-text{
+    font-weight:700;
+    font-size:15px;
+    line-height:1.15;
+  }
+
+  .brand-text .sub{
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:.02em;
+    color:#cfc4e8;
+  }
+
+  .header h1{
+    margin:0 0 10px;
+    font-size:34px;
+    font-weight:700;
+  }
+
+  .header .how{
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+    color:#e8e2f5;
+  }
+
+
+  /* ============================================================
+     LOAD CONTROLS
+     ============================================================ */
+
+  .controls{
+    max-width:760px;
+    margin:20px auto 0;
+    padding:14px 20px;
+    background:#fff;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .controls label{
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+  }
+
+  .controls input[type=number]{
+    width:64px;
+    padding:7px 8px;
+    border:1px solid #d5d0e0;
+    border-radius:6px;
+    font-size:14px;
+  }
+
+  .controls button{
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    background:var(--pl-purple);
+    color:#fff;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  .controls button:hover{
+    background:var(--pl-purple-dark);
+  }
+
+  .controls .status{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+
+  /* ============================================================
+     PREDICTIONS CLOSED - TOP OF PAGE
+     ============================================================ */
+
+  .predictions-closed-top{
+    max-width:760px;
+    margin:20px auto 8px;
+    padding:14px 18px 8px;
+    background:var(--lav);
+    border:1px solid var(--lav-line);
+    border-radius:8px;
+    color:var(--pl-purple);
+    font-weight:600;
+    text-align:center;
+  }
+
+  .predictions-closed-top .access-link{
+    display:inline-block;
+    margin-top:8px;
+    color:var(--pl-purple);
+    font-weight:700;
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  .predictions-closed-top .access-link:hover{
+    color:var(--pl-purple-dark);
+  }
+
+
+  /* ============================================================
+     ACCESS CODE
+     ============================================================ */
+
+  .access-override-row{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .access-code-input{
+    padding:9px 12px;
+    border:1px solid #d5d0e0;
+    border-radius:6px;
+    font-size:14px;
+    width:180px;
+  }
+
+  .access-code-input:focus{
+    outline:2px solid var(--pl-purple);
+    outline-offset:-2px;
+  }
+
+  .access-code-btn{
+    padding:9px 16px;
+    border:none;
+    border-radius:6px;
+    background:var(--pl-purple);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .access-code-btn:hover{
+    background:var(--pl-purple-dark);
+  }
+
+  .access-error{
+    margin:10px 0 0;
+    color:var(--req);
+    font-size:13px;
+    min-height:16px;
+  }
+
+
+  /* ============================================================
+     BODY
+     ============================================================ */
+
+  .notice{
+    max-width:760px;
+    margin:24px auto 4px;
+    padding:0 4px;
+    font-size:14px;
+    color:var(--ink);
+  }
+
+  .required-note{
+    max-width:760px;
+    margin:10px auto 20px;
+    padding:0 4px;
+    font-size:14px;
+  }
+
+  .required-note .star{
+    color:var(--req);
+  }
+
+  form{
+    max-width:760px;
+    margin:0 auto 60px;
+  }
+
+  .qblock{
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+    margin-bottom:18px;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+  }
+
+  .qheader{
+    background:var(--lav);
+    padding:18px 24px 20px;
+  }
+
+  .qnum{
+    display:inline-block;
+    background:var(--pl-purple);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:4px;
+    margin-bottom:14px;
+  }
+
+  .qtitle{
+    font-size:16px;
+    font-weight:600;
+    margin:0 0 14px;
+  }
+
+  .star{
+    color:var(--req);
+  }
+
+  .fixture-card{
+    background:#fff;
+    border-radius:6px;
+    padding:20px 30px 16px;
+  }
+
+  .fixture-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:60px;
+  }
+
+  .team{
+    text-align:center;
+    width:160px;
+  }
+
+  .team img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    margin-bottom:10px;
+  }
+
+  .team .badge-fallback{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:#f0eef5;
+    border:1px solid var(--lav-line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    color:var(--muted);
+    margin:0 auto 10px;
+    text-align:center;
+    padding:4px;
+  }
+
+  .team-name{
+    font-size:20px;
+    font-weight:700;
+  }
+
+  .vs{
+    font-size:18px;
+    font-weight:600;
+    color:var(--muted);
+    align-self:center;
+    margin-top:40px;
+  }
+
+  .answer-wrap{
+    padding:0 0 4px;
+  }
+
+  .answer-input{
+    width:100%;
+    padding:12px 14px;
+    border:none;
+    border-top:1px solid #eee;
+    font-size:15px;
+    border-radius:0 0 8px 8px;
+  }
+
+  .answer-input:focus{
+    outline:2px solid var(--pl-purple);
+    outline-offset:-2px;
+  }
+
+  .answer-input:disabled{
+    background:#f3f2f5;
+    cursor:not-allowed;
+  }
+
+
+  /* ============================================================
+     SUBMIT
+     ============================================================ */
+
+  .submit-row{
+    max-width:760px;
+    margin:0 auto 60px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+
+  .submit-btn{
+    padding:10px 26px;
+    background:var(--pl-purple);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+  }
+
+  .submit-btn:hover{
+    background:var(--pl-purple-dark);
+  }
+
+  .submit-btn:disabled{
+    background:#8d8798;
+    cursor:not-allowed;
+    opacity:.8;
+  }
+
+  .submit-msg{
+    font-size:14px;
+    color:var(--muted);
+  }
+
+
+  /* ============================================================
+     CONFIRMATION
+     ============================================================ */
+
+  .confirmation{
+    max-width:760px;
+    margin:40px auto;
+    background:#fff;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    padding:40px;
+    text-align:center;
+  }
+
+  .confirmation h2{
+    margin-top:0;
+    color:var(--pl-purple);
+  }
+
+  .confirmation button{
+    margin-top:20px;
+    padding:10px 22px;
+    border:1px solid var(--pl-purple);
+    background:#fff;
+    color:var(--pl-purple);
+    border-radius:6px;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+
+  /* ============================================================
+     STATES
+     ============================================================ */
+
+  .empty-state,
+  .loading-state{
+    max-width:760px;
+    margin:40px auto;
+    text-align:center;
+    color:var(--muted);
+    font-size:15px;
+  }
+
+
+  /* ============================================================
+     MOBILE
+     ============================================================ */
+
+  @media (max-width:600px){
+
+    .header{
+      padding:24px 20px 26px;
+    }
+
+    .header h1{
+      font-size:28px;
+    }
+
+    .fixture-row{
+      gap:15px;
+    }
+
+    .team{
+      width:120px;
+    }
+
+    .team img,
+    .team .badge-fallback{
+      width:65px;
+      height:65px;
+    }
+
+    .team-name{
+      font-size:17px;
+    }
+
+    .vs{
+      font-size:16px;
+    }
+
+    .fixture-card{
+      padding:20px 10px 16px;
+    }
+
+    .access-override-row{
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .access-code-input{
+      width:100%;
+      max-width:260px;
+    }
+
+    .access-code-btn{
+      width:100%;
+      max-width:260px;
+    }
+
+  }
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+
+<div class="header">
+
+  <div class="brand">
+
+    <div class="brand-text">
+      Premier League Predictions
+    </div>
+
+  </div>
+
+  <h1 id="pageTitle">
+    Matchday <span id="mdLabel">1</span>
+  </h1>
+
+  <p class="how">
+    How to answer: Home Team Score - Away Team Score
+  </p>
+
+</div>
+
+
+<!-- ============================================================
+     HIDDEN MATCHDAY CONTROLS
+     ============================================================ -->
+
+<div class="controls" style="display:none;">
+
+  <label>
+    Matchday:
+    <input
+      type="number"
+      id="matchdayInput"
+      min="1"
+      max="38"
+      value="1"
+    >
+  </label>
+
+  <span
+    class="status"
+    id="statusMsg">
+  </span>
+
+</div>
+
+
+<!-- ============================================================
+     PREDICTION FORM
+     ============================================================ -->
+
+<form id="predictionForm">
+
+
+  <!-- NAME -->
+
+  <div class="qblock">
+
+    <div class="qheader">
+
+      <span class="qnum">
+        1
+      </span>
+
+      <p class="qtitle">
+        Name <span class="star">*</span>
+      </p>
+
+    </div>
+
+    <div class="answer-wrap">
+
+      <input
+        class="answer-input"
+        type="text"
+        id="nameInput"
+        placeholder="Enter your answer"
+        required
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- FIXTURES -->
+
+  <div id="fixtureQuestions"></div>
+
+
+</form>
+
+
+<!-- ============================================================
+     SUBMIT
+     ============================================================ -->
+
+<div
+  class="submit-row"
+  id="submitRow"
+  style="display:none;"
+>
+
+  <button
+    class="submit-btn"
+    id="submitBtn"
+    type="button"
+  >
+    Submit
+  </button>
+
+</div>
+
+
+<!-- ============================================================
+     CONFIRMATION
+     ============================================================ -->
+
+<div id="confirmationBox"></div>
+
+
+<script>
+
+
+// ============================================================
+// SETTINGS
+// ============================================================
+
+const workerUrl =
+  'https://plp-fixtures-graphics.webadmin-a16.workers.dev/';
+
+
+const formspreeEndpoint =
+  'https://www.formbackend.com/f/2778e85726b9dd09';
+
+
+const hullCityBadge =
+  'http://fg.plp.blacksinc.co.uk/HullCity.png';
+
+
+// ============================================================
+// ACCESS CODE OVERRIDE
+// ============================================================
+
+const ACCESS_OVERRIDE_CODE =
+  'oldtrafford';
+
+
+// ============================================================
+// GLOBAL VARIABLES
+// ============================================================
+
+let currentFixtures = [];
+
+let kickoffTime = null;
+
+let timerInterval = null;
+
+let predictionOverride = false;
+
+
+// ============================================================
+// TEAM NAME CLEANING
+// ============================================================
+
+function cleanName(name) {
+
+  const map = {
+
+    "Wolverhampton Wanderers":
+      "Wolves",
+
+    "Wolverhampton Wanderers FC":
+      "Wolves",
+
+    "West Ham United":
+      "West Ham",
+
+    "West Ham United FC":
+      "West Ham",
+
+    "Tottenham Hotspur":
+      "Tottenham",
+
+    "Tottenham Hotspur FC":
+      "Tottenham",
+
+    "AFC Bournemouth":
+      "Bournemouth",
+
+    "Sunderland A":
+      "Sunderland",
+
+    "Sunderland AFC":
+      "Sunderland",
+
+    "Brighton & Hove Albion":
+      "Brighton",
+
+    "Brighton & Hove Albion FC":
+      "Brighton",
+
+    "Hull City AFC":
+      "Hull City",
+
+    "Hull City FC":
+      "Hull City",
+
+    "Hull City":
+      "Hull City"
+
+  };
+
+  const cleaned =
+    name.replace(/\s+FC$/i, "");
+
+  return (
+    map[name] ||
+    map[cleaned] ||
+    cleaned
+  );
+
+}
+
+
+// ============================================================
+// GET TEAM CREST
+// ============================================================
+
+function getTeamCrest(team) {
+
+  if (
+    team.name === "Hull City AFC" ||
+    team.name === "Hull City FC" ||
+    team.name === "Hull City"
+  ) {
+
+    return hullCityBadge;
+
+  }
+
+  return team.crest;
+
+}
+
+
+// ============================================================
+// GET LOGO URL
+// ============================================================
+
+function getLogoUrl(team) {
+
+  const crest =
+    getTeamCrest(team);
+
+  return (
+    `${workerUrl}?url=${encodeURIComponent(crest)}`
+  );
+
+}
+
+
+// ============================================================
+// FETCH FIXTURES
+// ============================================================
+
+async function fetchFixtures(matchday) {
+
+  const apiUrl =
+    'https://api.football-data.org/v4/competitions/PL/matches?season=2026&matchday='
+    + matchday;
+
+  const url =
+    `${workerUrl}?url=${encodeURIComponent(apiUrl)}`;
+
+  const res =
+    await fetch(url);
+
+  if (!res.ok) {
+
+    throw new Error(
+      `Failed to fetch fixtures: HTTP ${res.status}`
+    );
+
+  }
+
+  const data =
+    await res.json();
+
+  return data.matches;
+
+}
+
+
+// ============================================================
+// FORMAT KICKOFF
+// ============================================================
+
+function formatKickoff(utcDate) {
+
+  const d =
+    new Date(utcDate);
+
+  const weekday =
+    d.toLocaleDateString(
+      'en-GB',
+      {
+        weekday:'long'
+      }
+    );
+
+  const time =
+    d.toLocaleTimeString(
+      'en-GB',
+      {
+        hour:'2-digit',
+        minute:'2-digit',
+        hour12:false
+      }
+    );
+
+  return `${weekday} ${time}`;
+
+}
+
+
+// ============================================================
+// GET EARLIEST KICKOFF
+// ============================================================
+
+function getMatchdayKickoff(matches) {
+
+  const kickoffTimes =
+    matches
+
+      .map(
+        match =>
+          new Date(
+            match.utcDate
+          ).getTime()
+      )
+
+      .filter(
+        time =>
+          !isNaN(time)
+      );
+
+
+  if (!kickoffTimes.length) {
+
+    return null;
+
+  }
+
+
+  return Math.min(
+    ...kickoffTimes
+  );
+
+}
+
+
+// ============================================================
+// CREATE ACCESS CODE BOX
+// ============================================================
+
+function createAccessOverride() {
+
+  // Don't create it twice
+
+  if (
+    document.getElementById(
+      'predictionsClosedTop'
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const message =
+    document.createElement(
+      'div'
+    );
+
+
+  message.id =
+    'predictionsClosedTop';
+
+
+  message.className =
+    'predictions-closed-top';
+
+
+  message.innerHTML = `
+
+    <div>
+      Predictions are closed because the matchday has started.
+    </div>
+
+    <div
+      class="access-link"
+      id="showAccessCode"
+    >
+      Have an access code?
+      <strong>Unlock</strong>
+    </div>
+
+    <div
+      id="accessCodePanel"
+      style="display:none; margin-top:14px;"
+    >
+
+      <div class="access-override-row">
+
+        <input
+          type="password"
+          id="accessCodeInput"
+          class="access-code-input"
+          placeholder="Enter access code"
+          autocomplete="off"
+        >
+
+        <button
+          type="button"
+          id="accessCodeBtn"
+          class="access-code-btn"
+        >
+          Unlock
+        </button>
+
+      </div>
+
+      <div
+        id="accessCodeError"
+        class="access-error"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  // Insert directly below header
+
+  const header =
+    document.querySelector(
+      '.header'
+    );
+
+
+  header.parentNode.insertBefore(
+    message,
+    header.nextSibling
+  );
+
+
+  // Show access-code panel
+
+  document
+    .getElementById(
+      'showAccessCode'
+    )
+    .addEventListener(
+      'click',
+      () => {
+
+        const panel =
+          document.getElementById(
+            'accessCodePanel'
+          );
+
+
+        panel.style.display =
+          'block';
+
+
+        document
+          .getElementById(
+            'accessCodeInput'
+          )
+          .focus();
+
+      }
+    );
+
+
+  // Unlock button
+
+  document
+    .getElementById(
+      'accessCodeBtn'
+    )
+    .addEventListener(
+      'click',
+      unlockPredictions
+    );
+
+
+  // Enter key
+
+  document
+    .getElementById(
+      'accessCodeInput'
+    )
+    .addEventListener(
+      'keydown',
+      event => {
+
+        if (
+          event.key === 'Enter'
+        ) {
+
+          event.preventDefault();
+
+          unlockPredictions();
+
+        }
+
+      }
+    );
+
+}
+
+
+// ============================================================
+// LOCK PREDICTIONS
+// ============================================================
+
+function lockPredictions() {
+
+  // Don't lock if manually overridden
+
+  if (
+    predictionOverride
+  ) {
+
+    return;
+
+  }
+
+
+  const form =
+    document.getElementById(
+      'predictionForm'
+    );
+
+
+  const submitBtn =
+    document.getElementById(
+      'submitBtn'
+    );
+
+
+  if (
+    !form ||
+    !submitBtn
+  ) {
+
+    return;
+
+  }
+
+
+  // Disable all form inputs
+
+  form
+    .querySelectorAll(
+      'input, select, textarea'
+    )
+    .forEach(
+      element => {
+
+        element.disabled =
+          true;
+
+      }
+    );
+
+
+  // Disable submit
+
+  submitBtn.disabled =
+    true;
+
+
+  submitBtn.textContent =
+    'Predictions Closed - Game Started';
+
+
+  // Create closed message at top
+
+  createAccessOverride();
+
+
+  // Stop timer
+
+  if (timerInterval) {
+
+    clearInterval(
+      timerInterval
+    );
+
+    timerInterval =
+      null;
+
+  }
+
+}
+
+
+// ============================================================
+// CHECK TIME AND LOCK
+// ============================================================
+
+function checkTimeAndLock() {
+
+  // Manual override means don't lock
+
+  if (
+    predictionOverride
+  ) {
+
+    return;
+
+  }
+
+
+  if (!kickoffTime) {
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+
+  if (
+    now >= kickoffTime
+  ) {
+
+    lockPredictions();
+
+  }
+
+}
+
+
+// ============================================================
+// START PREDICTION TIMER
+// ============================================================
+
+function startPredictionTimer(
+  matches
+) {
+
+  // Stop previous timer
+
+  if (timerInterval) {
+
+    clearInterval(
+      timerInterval
+    );
+
+    timerInterval =
+      null;
+
+  }
+
+
+  // Get earliest kickoff
+
+  kickoffTime =
+    getMatchdayKickoff(
+      matches
+    );
+
+
+  if (!kickoffTime) {
+
+    console.error(
+      'Could not determine matchday kickoff time.'
+    );
+
+    return;
+
+  }
+
+
+  console.log(
+    'Matchday kickoff:',
+    new Date(
+      kickoffTime
+    ).toString()
+  );
+
+
+  // Check immediately
+
+  checkTimeAndLock();
+
+
+  // Continue checking every second
+
+  if (
+    Date.now() <
+    kickoffTime
+  ) {
+
+    timerInterval =
+      setInterval(
+        checkTimeAndLock,
+        1000
+      );
+
+  }
+
+}
+
+
+// ============================================================
+// UNLOCK PREDICTIONS
+// ============================================================
+
+function unlockPredictions() {
+
+  const input =
+    document.getElementById(
+      'accessCodeInput'
+    );
+
+
+  const error =
+    document.getElementById(
+      'accessCodeError'
+    );
+
+
+  if (
+    !input ||
+    !error
+  ) {
+
+    return;
+
+  }
+
+
+  const enteredCode =
+    input.value.trim();
+
+
+  // ==========================================================
+  // CORRECT CODE
+  // ==========================================================
+
+  if (
+    enteredCode ===
+    ACCESS_OVERRIDE_CODE
+  ) {
+
+    predictionOverride =
+      true;
+
+
+    // Re-enable form
+
+    const form =
+      document.getElementById(
+        'predictionForm'
+      );
+
+
+    form
+      .querySelectorAll(
+        'input, select, textarea'
+      )
+      .forEach(
+        element => {
+
+          element.disabled =
+            false;
+
+        }
+      );
+
+
+    // Re-enable submit
+
+    const submitBtn =
+      document.getElementById(
+        'submitBtn'
+      );
+
+
+    submitBtn.disabled =
+      false;
+
+
+    submitBtn.textContent =
+      'Submit';
+
+
+    // Remove closed message
+
+    const closedMessage =
+      document.getElementById(
+        'predictionsClosedTop'
+      );
+
+
+    if (closedMessage) {
+
+      closedMessage.remove();
+
+    }
+
+
+    // Make sure submit row is visible
+
+    submitRow.style.display =
+      'flex';
+
+
+    console.log(
+      'Prediction form manually unlocked.'
+    );
+
+
+  }
+
+  // ==========================================================
+  // INCORRECT CODE
+  // ==========================================================
+
+  else {
+
+    error.textContent =
+      'Incorrect access code.';
+
+
+    input.value =
+      '';
+
+
+    input.focus();
+
+  }
+
+}
+
+
+// ============================================================
+// BUILD FIXTURE QUESTION
+// ============================================================
+
+function buildFixtureBlock(
+  fixture,
+  index
+) {
+
+  const qnum =
+    index + 2;
+
+
+  const homeName =
+    cleanName(
+      fixture.homeTeam.name
+    );
+
+
+  const awayName =
+    cleanName(
+      fixture.awayTeam.name
+    );
+
+
+  const kickoff =
+    fixture.utcDate
+      ? formatKickoff(
+          fixture.utcDate
+        )
+      : '';
+
+
+  const block =
+    document.createElement(
+      'div'
+    );
+
+
+  block.className =
+    'qblock';
+
+
+  block.innerHTML = `
+
+    <div class="qheader">
+
+      <span class="qnum">
+        ${qnum}
+      </span>
+
+      <p class="qtitle">
+
+        ${homeName} v ${awayName}
+
+        ${
+          kickoff
+            ? ` (${kickoff})`
+            : ''
+        }
+
+        <span class="star">
+          *
+        </span>
+
+      </p>
+
+      <div class="fixture-card">
+
+        <div class="fixture-row">
+
+          <div class="team">
+
+            <img
+              data-fallback-name="${homeName}"
+              src="${getLogoUrl(fixture.homeTeam)}"
+              alt="${homeName} crest"
+            >
+
+            <div class="team-name">
+              ${homeName}
+            </div>
+
+          </div>
+
+          <div class="vs">
+            vs
+          </div>
+
+          <div class="team">
+
+            <img
+              data-fallback-name="${awayName}"
+              src="${getLogoUrl(fixture.awayTeam)}"
+              alt="${awayName} crest"
+            >
+
+            <div class="team-name">
+              ${awayName}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="answer-wrap">
+
+      <input
+        class="answer-input"
+        type="text"
+        data-home="${homeName}"
+        data-away="${awayName}"
+        placeholder="e.g. 2-1"
+        pattern="^\\s*\\d+\\s*-\\s*\\d+\\s*$"
+        required
+      >
+
+    </div>
+
+  `;
+
+
+  // Crest fallback
+
+  block
+    .querySelectorAll('img')
+    .forEach(
+      img => {
+
+        img.addEventListener(
+          'error',
+          () => {
+
+            const wrap =
+              document.createElement(
+                'div'
+              );
+
+
+            wrap.className =
+              'badge-fallback';
+
+
+            wrap.textContent =
+              img.dataset.fallbackName ||
+              '';
+
+
+            img.replaceWith(
+              wrap
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  return block;
+
+}
+
+
+// ============================================================
+// DOM ELEMENTS
+// ============================================================
+
+const fixturesContainer =
+  document.getElementById(
+    'fixtureQuestions'
+  );
+
+
+const statusMsg =
+  document.getElementById(
+    'statusMsg'
+  );
+
+
+const submitRow =
+  document.getElementById(
+    'submitRow'
+  );
+
+
+const matchdayInput =
+  document.getElementById(
+    'matchdayInput'
+  );
+
+
+// ============================================================
+// LOAD FIXTURES
+// ============================================================
+
+async function loadFixtures(
+  matchday
+) {
+
+  document.getElementById(
+    'mdLabel'
+  ).textContent =
+    matchday;
+
+
+  fixturesContainer.innerHTML =
+    '';
+
+
+  submitRow.style.display =
+    'none';
+
+
+  statusMsg.textContent =
+    'Loading fixtures…';
+
+
+  // Reset manual override when changing matchday
+
+  predictionOverride =
+    false;
+
+
+  // Remove previous closed message
+
+  const oldClosedMessage =
+    document.getElementById(
+      'predictionsClosedTop'
+    );
+
+
+  if (oldClosedMessage) {
+
+    oldClosedMessage.remove();
+
+  }
+
+
+  // Stop previous timer
+
+  if (timerInterval) {
+
+    clearInterval(
+      timerInterval
+    );
+
+    timerInterval =
+      null;
+
+  }
+
+
+  kickoffTime =
+    null;
+
+
+  // Re-enable form fields
+
+  document
+    .querySelectorAll(
+      '#predictionForm input, #predictionForm select, #predictionForm textarea'
+    )
+    .forEach(
+      element => {
+
+        element.disabled =
+          false;
+
+      }
+    );
+
+
+  const submitBtn =
+    document.getElementById(
+      'submitBtn'
+    );
+
+
+  submitBtn.disabled =
+    false;
+
+
+  submitBtn.textContent =
+    'Submit';
+
+
+  try {
+
+    const matches =
+      await fetchFixtures(
+        matchday
+      );
+
+
+    currentFixtures =
+      matches;
+
+
+    if (
+      !matches.length
+    ) {
+
+      fixturesContainer.innerHTML =
+        '<p class="empty-state">No fixtures found for this matchday.</p>';
+
+
+      statusMsg.textContent =
+        '';
+
+
+      return;
+
+    }
+
+
+    // Build fixture questions
+
+    matches.forEach(
+      (fixture, i) => {
+
+        fixturesContainer.appendChild(
+          buildFixtureBlock(
+            fixture,
+            i
+          )
+        );
+
+      }
+    );
+
+
+    submitRow.style.display =
+      'flex';
+
+
+    statusMsg.textContent =
+      `Loaded ${matches.length} fixtures.`;
+
+
+    // Start automatic timer
+
+    startPredictionTimer(
+      matches
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      'FIXTURE ERROR:',
+      error
+    );
+
+
+    fixturesContainer.innerHTML =
+      '<p class="empty-state">Error loading fixtures.</p>';
+
+
+    statusMsg.textContent =
+      '';
+
+  }
+
+}
+
+
+// ============================================================
+// UPDATE URL
+// ============================================================
+
+function setMatchdayInUrl(
+  matchday
+) {
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+
+  url.searchParams.set(
+    'matchday',
+    matchday
+  );
+
+
+  window.history.replaceState(
+    {},
+    '',
+    url
+  );
+
+}
+
+
+// ============================================================
+// MATCHDAY CHANGE
+// ============================================================
+
+matchdayInput.addEventListener(
+  'change',
+  () => {
+
+    const matchday =
+      matchdayInput.value;
+
+
+    setMatchdayInUrl(
+      matchday
+    );
+
+
+    loadFixtures(
+      matchday
+    );
+
+  }
+);
+
+
+// ============================================================
+// INITIAL LOAD
+// ============================================================
+
+(function init() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const matchdayFromUrl =
+    params.get(
+      'matchday'
+    );
+
+
+  const matchday =
+    matchdayFromUrl &&
+    Number(matchdayFromUrl) > 0
+
+      ? matchdayFromUrl
+
+      : '1';
+
+
+  matchdayInput.value =
+    matchday;
+
+
+  setMatchdayInUrl(
+    matchday
+  );
+
+
+  loadFixtures(
+    matchday
+  );
+
+})();
+
+
+// ============================================================
+// SUBMIT
+// ============================================================
+
+document
+  .getElementById(
+    'submitBtn'
+  )
+  .addEventListener(
+    'click',
+    async () => {
+
+
+      // ======================================================
+      // CHECK KICKOFF
+      // ======================================================
+
+      // Don't allow submission after kickoff unless the
+      // correct access code has been entered.
+
+      if (
+        kickoffTime &&
+        Date.now() >= kickoffTime &&
+        !predictionOverride
+      ) {
+
+        lockPredictions();
+
+        return;
+
+      }
+
+
+      // ======================================================
+      // VALIDATE FORM
+      // ======================================================
+
+      const form =
+        document.getElementById(
+          'predictionForm'
+        );
+
+
+      if (
+        !form.checkValidity()
+      ) {
+
+        form.reportValidity();
+
+        return;
+
+      }
+
+
+      const submitBtn =
+        document.getElementById(
+          'submitBtn'
+        );
+
+
+      const matchday =
+        document.getElementById(
+          'matchdayInput'
+        ).value;
+
+
+      const name =
+        document.getElementById(
+          'nameInput'
+        ).value.trim();
+
+
+      const answers =
+        Array.from(
+          document.querySelectorAll(
+            '.answer-input[data-home]'
+          )
+        ).map(
+          input => ({
+
+            home:
+              input.dataset.home,
+
+            away:
+              input.dataset.away,
+
+            prediction:
+              input.value.trim()
+
+          })
+        );
+
+
+      // ======================================================
+      // DOWNLOAD TEXT
+      // ======================================================
+
+      const lines = [
+
+        `Name: ${name}`,
+
+        `Matchday: ${matchday}`,
+
+        '',
+
+        ...answers.map(
+          a =>
+            `${a.home} v ${a.away}: ${a.prediction}`
+        )
+
+      ];
+
+
+      const textBlob =
+        lines.join('\n');
+
+
+      // ======================================================
+      // FORM SUBMISSION PAYLOAD
+      // ======================================================
+
+      const payload = {
+
+        name,
+
+        matchday
+
+      };
+
+
+      answers.forEach(
+        a => {
+
+          payload[
+            `${a.home} v ${a.away}`
+          ] =
+            "'" + a.prediction;
+
+        }
+      );
+
+
+      submitBtn.disabled =
+        true;
+
+
+      submitBtn.textContent =
+        'Submitting…';
+
+
+      let submitError =
+        null;
+
+
+      // ======================================================
+      // SEND SUBMISSION
+      // ======================================================
+
+      try {
+
+        if (
+          !formspreeEndpoint.includes(
+            'YOUR_FORM_ID'
+          )
+        ) {
+
+          const res =
+            await fetch(
+              formspreeEndpoint,
+              {
+
+                method:'POST',
+
+                headers:{
+
+                  'Accept':
+                    'application/json',
+
+                  'Content-Type':
+                    'application/json'
+
+                },
+
+                body:
+                  JSON.stringify(
+                    payload
+                  )
+
+              }
+            );
+
+
+          if (!res.ok) {
+
+            const data =
+              await res
+                .json()
+                .catch(
+                  () => ({})
+                );
+
+
+            throw new Error(
+              data.error ||
+              `Formspree returned HTTP ${res.status}`
+            );
+
+          }
+
+        } else {
+
+          throw new Error(
+            'Formspree endpoint not configured yet.'
+          );
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          'SUBMIT ERROR:',
+          error
+        );
+
+
+        submitError =
+          error.message;
+
+      }
+
+
+      // ======================================================
+      // SHOW CONFIRMATION
+      // ======================================================
+
+      form.style.display =
+        'none';
+
+
+      submitRow.style.display =
+        'none';
+
+
+      const box =
+        document.getElementById(
+          'confirmationBox'
+        );
+
+
+      box.innerHTML =
+
+        submitError
+
+          ? `
+
+            <div class="confirmation">
+
+              <h2>
+                Couldn't submit your predictions
+              </h2>
+
+              <p>
+                ${submitError}
+                Please try again later.
+              </p>
+
+              <button id="downloadBtn">
+                Download my predictions
+              </button>
+
+            </div>
+
+          `
+
+          : `
+
+            <div class="confirmation">
+
+              <h2>
+                Your predictions have been recorded
+              </h2>
+
+              <p>
+                Thanks, ${name || 'friend'}!
+              </p>
+
+              <button id="downloadBtn">
+                Download my predictions
+              </button>
+
+            </div>
+
+          `;
+
+
+      // ======================================================
+      // DOWNLOAD PREDICTIONS
+      // ======================================================
+
+      document
+        .getElementById(
+          'downloadBtn'
+        )
+        .addEventListener(
+          'click',
+          () => {
+
+            const blob =
+              new Blob(
+                [textBlob],
+                {
+                  type:
+                    'text/plain'
+                }
+              );
+
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            const a =
+              document.createElement(
+                'a'
+              );
+
+
+            a.href =
+              url;
+
+
+            a.download =
+              `matchday-${matchday}-predictions.txt`;
+
+
+            a.click();
+
+
+            URL.revokeObjectURL(
+              url
+            );
+
+          }
+        );
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
