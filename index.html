@@ -598,6 +598,28 @@
   </div>
 
 
+  <!-- HONEYPOT (spam trap for FormBackend) - hidden from real users.
+       Bots tend to fill every field; humans never see or touch this. -->
+
+  <div
+    aria-hidden="true"
+    style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">
+
+    <label for="hpField">
+      Leave this field empty
+    </label>
+
+    <input
+      type="text"
+      id="hpField"
+      name="_honeypot"
+      tabindex="-1"
+      autocomplete="off"
+      value="">
+
+  </div>
+
+
   <!-- FIXTURES -->
 
   <div id="fixtureQuestions"></div>
@@ -2049,7 +2071,14 @@ document
 
         name,
 
-        matchday
+        matchday,
+
+        // Honeypot: must stay empty for real users. FormBackend
+        // flags the submission as spam if this field has a value.
+        _honeypot:
+          document.getElementById(
+            'hpField'
+          ).value
 
       };
 
