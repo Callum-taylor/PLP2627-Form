@@ -598,24 +598,32 @@
   </div>
 
 
-  <!-- HONEYPOT (spam trap for FormBackend) - hidden from real users.
-       Bots tend to fill every field; humans never see or touch this. -->
+  <!-- WEB3FORMS ACCESS KEY -->
+
+  <input
+    type="hidden"
+    name="access_key"
+    id="accessKey"
+    value="c8b62f2c-b07d-40d6-bf06-453f0a45c6b0">
+
+
+  <!-- HONEYPOT (Web3Forms "botcheck") - hidden from real users.
+       Bots tend to tick every field; humans never see or touch this. -->
 
   <div
     aria-hidden="true"
     style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">
 
     <label for="hpField">
-      Leave this field empty
+      Do not tick this box
     </label>
 
     <input
-      type="text"
+      type="checkbox"
       id="hpField"
-      name="_honeypot"
+      name="botcheck"
       tabindex="-1"
-      autocomplete="off"
-      value="">
+      autocomplete="off">
 
   </div>
 
@@ -667,8 +675,8 @@ const workerUrl =
   'https://plp-fixtures-graphics.webadmin-a16.workers.dev/';
 
 
-const formspreeEndpoint =
-  'https://www.formbackend.com/f/2778e85726b9dd09';
+const formEndpoint =
+  'https://api.web3forms.com/submit';
 
 
 const hullCityBadge =
@@ -2069,16 +2077,24 @@ document
 
       const payload = {
 
+        access_key:
+          document.getElementById(
+            'accessKey'
+          ).value,
+
+        subject:
+          `Matchday ${matchday} predictions - ${name}`,
+
         name,
 
         matchday,
 
-        // Honeypot: must stay empty for real users. FormBackend
-        // flags the submission as spam if this field has a value.
-        _honeypot:
+        // Honeypot: stays unticked for real users. Web3Forms
+        // rejects the submission as spam if this is ticked.
+        botcheck:
           document.getElementById(
             'hpField'
-          ).value
+          ).checked
 
       };
 
@@ -2113,59 +2129,48 @@ document
 
       try {
 
+        const res =
+          await fetch(
+            formEndpoint,
+            {
+
+              method:'POST',
+
+              headers:{
+
+                'Accept':
+                  'application/json',
+
+                'Content-Type':
+                  'application/json'
+
+              },
+
+              body:
+                JSON.stringify(
+                  payload
+                )
+
+            }
+          );
+
+
+        const data =
+          await res
+            .json()
+            .catch(
+              () => ({})
+            );
+
+
         if (
-          !formspreeEndpoint.includes(
-            'YOUR_FORM_ID'
-          )
+          !res.ok ||
+          data.success === false
         ) {
 
-          const res =
-            await fetch(
-              formspreeEndpoint,
-              {
-
-                method:'POST',
-
-                headers:{
-
-                  'Accept':
-                    'application/json',
-
-                  'Content-Type':
-                    'application/json'
-
-                },
-
-                body:
-                  JSON.stringify(
-                    payload
-                  )
-
-              }
-            );
-
-
-          if (!res.ok) {
-
-            const data =
-              await res
-                .json()
-                .catch(
-                  () => ({})
-                );
-
-
-            throw new Error(
-              data.error ||
-              `Formspree returned HTTP ${res.status}`
-            );
-
-          }
-
-        } else {
-
           throw new Error(
-            'Formspree endpoint not configured yet.'
+            data.message ||
+            `Form service returned HTTP ${res.status}`
           );
 
         }
