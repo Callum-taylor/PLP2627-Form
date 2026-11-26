@@ -598,30 +598,22 @@
   </div>
 
 
-  <!-- WEB3FORMS ACCESS KEY -->
-
-  <input
-    type="hidden"
-    name="access_key"
-    id="accessKey"
-    value="c8b62f2c-b07d-40d6-bf06-453f0a45c6b0">
-
-
-  <!-- HONEYPOT (Web3Forms "botcheck") - hidden from real users.
-       Bots tend to tick every field; humans never see or touch this. -->
+  <!-- HONEYPOT - hidden from real users. Bots tend to fill every
+       field; humans never see or touch this. If it has a value,
+       the page silently discards the submission. -->
 
   <div
     aria-hidden="true"
     style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">
 
     <label for="hpField">
-      Do not tick this box
+      Leave this field empty
     </label>
 
     <input
-      type="checkbox"
+      type="text"
       id="hpField"
-      name="botcheck"
+      name="website_url"
       tabindex="-1"
       autocomplete="off">
 
@@ -676,7 +668,7 @@ const workerUrl =
 
 
 const formEndpoint =
-  'https://api.web3forms.com/submit';
+  'https://formtorch.com/f/3gdhijhpqz';
 
 
 const hullCityBadge =
@@ -1968,6 +1960,21 @@ document
 
 
       // ======================================================
+      // HONEYPOT - bots fill the hidden field, humans never do
+      // ======================================================
+
+      if (
+        document.getElementById(
+          'hpField'
+        ).value
+      ) {
+
+        return;
+
+      }
+
+
+      // ======================================================
       // CHECK KICKOFF
       // ======================================================
 
@@ -2077,24 +2084,9 @@ document
 
       const payload = {
 
-        access_key:
-          document.getElementById(
-            'accessKey'
-          ).value,
-
-        subject:
-          `Matchday ${matchday} predictions - ${name}`,
-
         name,
 
-        matchday,
-
-        // Honeypot: stays unticked for real users. Web3Forms
-        // rejects the submission as spam if this is ticked.
-        botcheck:
-          document.getElementById(
-            'hpField'
-          ).checked
+        matchday
 
       };
 
@@ -2163,13 +2155,11 @@ document
             );
 
 
-        if (
-          !res.ok ||
-          data.success === false
-        ) {
+        if (!res.ok) {
 
           throw new Error(
             data.message ||
+            data.error ||
             `Form service returned HTTP ${res.status}`
           );
 
