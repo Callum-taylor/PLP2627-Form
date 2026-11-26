@@ -598,9 +598,8 @@
   </div>
 
 
-  <!-- HONEYPOT - hidden from real users. Bots tend to fill every
-       field; humans never see or touch this. If it has a value,
-       the page silently discards the submission. -->
+  <!-- HONEYPOT (spam trap for FormBackend) - hidden from real users.
+       Bots tend to fill every field; humans never see or touch this. -->
 
   <div
     aria-hidden="true"
@@ -613,7 +612,7 @@
     <input
       type="text"
       id="hpField"
-      name="website_url"
+      name="_honeypot"
       tabindex="-1"
       autocomplete="off">
 
@@ -668,7 +667,7 @@ const workerUrl =
 
 
 const formEndpoint =
-  'https://formtorch.com/f/3gdhijhpqz';
+  'https://www.formbackend.com/f/2778e85726b9dd09';
 
 
 const hullCityBadge =
@@ -2086,7 +2085,14 @@ document
 
         name,
 
-        matchday
+        matchday,
+
+        // Honeypot: must stay empty for real users. FormBackend
+        // flags the submission as spam if this field has a value.
+        _honeypot:
+          document.getElementById(
+            'hpField'
+          ).value
 
       };
 
